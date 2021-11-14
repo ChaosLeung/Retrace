@@ -1,6 +1,6 @@
 # Retrace
 
-R8 Retrace, only for MAC
+Proguard and R8 Retrace, only for MAC
 
 ### Running desktop application
 ```

@@ -19,43 +19,43 @@ package com.chaos.retrace
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.android.tools.r8.retrace.Retrace
+import com.chaos.retrace.proguard.ProguardRetrace
+import com.chaos.retrace.r8.R8Retrace
 import java.io.File
-import java.io.PrintStream
 
 class Deobfuscator {
-    var mapping: String by mutableStateOf("")
+    var proguardMapping: String by mutableStateOf("")
+    var r8Mapping: String by mutableStateOf("")
 
     var deobfuscatedTrace: String by mutableStateOf("")
     var obfuscatedTrace: String by mutableStateOf("")
 
+    private val r8Retrace: Retracer = R8Retrace()
+    private val proguardRetrace: Retracer = ProguardRetrace()
+
     fun retrace() {
-        if (obfuscatedTrace.isEmpty() || mapping.isEmpty()) {
+        if (obfuscatedTrace.isEmpty() || (r8Mapping.isEmpty() && proguardMapping.isEmpty())) {
             return
         }
 
-        val workDir = File(System.getProperty("user.home"), "Library/Application Support/Retrace")
-        if (!workDir.exists()) {
-            workDir.mkdirs()
-        }
-
-        val obfuscated = File(workDir, "temp_trace")
+        val obfuscated = File(Environment.workDir, "temp_trace")
         if (obfuscated.exists()) {
             obfuscated.delete()
         }
         obfuscated.createNewFile()
         obfuscated.writeText(obfuscatedTrace)
 
-        val deobfuscated = File(workDir, "temp_retrace")
-        if (deobfuscated.exists()) {
-            deobfuscated.delete()
+        var deobfuscated = obfuscatedTrace
+        if (proguardMapping.isNotEmpty()) {
+            deobfuscated = proguardRetrace.retrace(File(proguardMapping), obfuscated)
+
+            obfuscated.writeText(deobfuscated)
         }
 
-        val out = System.out
-        System.setOut(PrintStream(deobfuscated))
-        Retrace.run(arrayOf<String>(mapping, obfuscated.absolutePath))
-        System.setOut(out)
+        if (r8Mapping.isNotEmpty()) {
+            deobfuscated = r8Retrace.retrace(File(r8Mapping), obfuscated)
+        }
 
-        deobfuscatedTrace = deobfuscated.readText()
+        deobfuscatedTrace = deobfuscated
     }
 }

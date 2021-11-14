@@ -29,6 +29,7 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation("com.android.tools:r8:3.0.73")
+                implementation("com.guardsquare:proguard-retrace:7.1.1")
             }
         }
     }
@@ -41,7 +42,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg)
             packageName = "Retrace"
-            packageVersion = "1.0.0"
+            packageVersion = "1.0.1"
             vendor = "Chaos"
             description = "R8 Retrace"
             copyright = "Copyright © 2021 Chaos Leung"

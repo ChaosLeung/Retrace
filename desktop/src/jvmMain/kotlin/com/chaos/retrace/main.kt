@@ -19,6 +19,8 @@ package com.chaos.retrace
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.loadImageBitmap
 import androidx.compose.ui.res.useResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
 import java.awt.FileDialog
@@ -49,7 +52,13 @@ fun main() = singleWindowApplication(
 
         MappingBar(window, deobfuscator)
 
-        TraceLayout(deobfuscator)
+        TraceLayout(deobfuscator, modifier = Modifier.weight(1.0f))
+
+        Text(
+            text = "Tips: Retrace will be executed when the 'Obfuscated Trace' changes",
+            color = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
+            fontSize = 12.sp
+        )
     }
 }
 
@@ -58,10 +67,22 @@ fun MappingBar(window: ComposeWindow, deobfuscator: Deobfuscator) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
     ) {
-        MappingField(window, "R8 Mapping File", Modifier.weight(1.0f), deobfuscator.mapping) {
-            deobfuscator.mapping = it
-            deobfuscator.retrace()
-        }
+        MappingField(
+            window = window,
+            label = "Proguard Mapping File",
+            modifier = Modifier.weight(1.0f),
+            value = deobfuscator.proguardMapping,
+            onFileSelected = { deobfuscator.proguardMapping = it },
+            onClear = { deobfuscator.proguardMapping = "" }
+        )
+        MappingField(
+            window = window,
+            label = "R8 Mapping File",
+            modifier = Modifier.weight(1.0f),
+            value = deobfuscator.r8Mapping,
+            onFileSelected = { deobfuscator.r8Mapping = it },
+            onClear = { deobfuscator.r8Mapping = "" }
+        )
     }
 }
 
@@ -71,7 +92,8 @@ fun MappingField(
     label: String,
     modifier: Modifier,
     value: String,
-    onFileSelected: (String) -> Unit
+    onFileSelected: (String) -> Unit,
+    onClear: () -> Unit,
 ) {
     OutlinedTextField(
         value = value,
@@ -96,13 +118,24 @@ fun MappingField(
             disabledTrailingIconColor = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.IconOpacity),
             disabledPlaceholderColor = MaterialTheme.colors.onSurface.copy(ContentAlpha.medium),
         ),
+        trailingIcon = {
+            if (value.isNotEmpty()) {
+                Icon(
+                    Icons.Filled.Clear,
+                    contentDescription = "Clear text",
+                    modifier = Modifier.offset(x = 10.dp)
+                        .clickable { onClear() }
+                )
+            }
+        }
     )
 }
 
 @Composable
-fun TraceLayout(deobfuscator: Deobfuscator) {
+fun TraceLayout(deobfuscator: Deobfuscator, modifier: Modifier) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(space = 8.dp)
+        horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
+        modifier = modifier
     ) {
         OutlinedTextField(
             value = deobfuscator.obfuscatedTrace,
