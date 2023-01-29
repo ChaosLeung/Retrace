@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -27,9 +26,15 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.materialIconsExtended)
+                implementation(compose.desktop.common)
                 implementation(compose.desktop.currentOs)
-                implementation("com.android.tools:r8:3.0.73")
-                implementation("com.guardsquare:proguard-retrace:7.1.1")
+                implementation("com.android.tools:r8:3.2.78")
+                implementation("com.guardsquare:proguard-retrace:7.3.1")
+//                implementation("net.sf.proguard:proguard-retrace:4.7")
             }
         }
     }
@@ -42,7 +47,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg)
             packageName = "Retrace"
-            packageVersion = "1.0.1"
+            packageVersion = "1.0.2"
             vendor = "Chaos"
             description = "R8 Retrace"
             copyright = "Copyright © 2021 Chaos Leung"

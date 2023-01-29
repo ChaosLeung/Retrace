@@ -33,10 +33,13 @@ class Deobfuscator {
     private val r8Retrace: Retracer = R8Retrace()
     private val proguardRetrace: Retracer = ProguardRetrace()
 
+    @Synchronized
     fun retrace() {
         if (obfuscatedTrace.isEmpty() || (r8Mapping.isEmpty() && proguardMapping.isEmpty())) {
             return
         }
+
+        deobfuscatedTrace = "Retracing..."
 
         val obfuscated = File(Environment.workDir, "temp_trace")
         if (obfuscated.exists()) {
@@ -56,6 +59,6 @@ class Deobfuscator {
             deobfuscated = r8Retrace.retrace(File(r8Mapping), obfuscated)
         }
 
-        deobfuscatedTrace = deobfuscated
+        deobfuscatedTrace = deobfuscated.trim()
     }
 }

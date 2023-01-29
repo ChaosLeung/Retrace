@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -32,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.WindowState
 import androidx.compose.ui.window.singleWindowApplication
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.awt.FileDialog
 import java.io.File
 import java.io.FilenameFilter
@@ -137,11 +140,14 @@ fun TraceLayout(deobfuscator: Deobfuscator, modifier: Modifier) {
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
         modifier = modifier
     ) {
+        val composableScope = rememberCoroutineScope()
         OutlinedTextField(
             value = deobfuscator.obfuscatedTrace,
             onValueChange = {
                 deobfuscator.obfuscatedTrace = it
-                deobfuscator.retrace()
+                composableScope.launch(Dispatchers.IO) {
+                    deobfuscator.retrace()
+                }
             },
             label = { Text("Obfuscated Trace") },
             modifier = Modifier.weight(1.0f)
