@@ -60,5 +60,6 @@ class Deobfuscator {
         }
 
         deobfuscatedTrace = deobfuscated.trim()
+        obfuscated.delete()
     }
 }

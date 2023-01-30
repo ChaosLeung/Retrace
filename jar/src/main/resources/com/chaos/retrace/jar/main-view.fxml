@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+  ~ Copyright 2023 Chaos Leung
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<GridPane hgap="16.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" vgap="8.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chaos.retrace.jar.Controller">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="100.0" minHeight="10.0" percentHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="313.0" minHeight="10.0" percentHeight="85.0" prefHeight="313.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="313.0" minHeight="10.0" percentHeight="5.0" prefHeight="313.0" />
+    </rowConstraints>
+    <TextField id="proguardMappingInput" fx:id="proguardMappingInput" editable="false" focusTraversable="false" onMouseClicked="#onProguardMappingClicked" promptText="Proguard Mapping File">
+        <cursor>
+            <Cursor fx:constant="NONE" />
+        </cursor>
+    </TextField>
+    <TextField id="r8MappingInput" fx:id="r8MappingInput" editable="false" focusTraversable="false" onMouseClicked="#onR8MappingClicked" promptText="R8 Mapping File" GridPane.columnIndex="1">
+        <cursor>
+            <Cursor fx:constant="NONE" />
+        </cursor>
+    </TextField>
+    <TextArea id="obfuscatedTextArea" fx:id="obfuscatedTextArea" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" promptText="Obfuscated Text" GridPane.rowIndex="1">
+        <cursor>
+            <Cursor fx:constant="NONE" />
+        </cursor>
+    </TextArea>
+    <TextArea id="deobfuscatedTextArea" fx:id="deobfuscatedTextArea" editable="false" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" promptText="Deobfuscated Trace" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <cursor>
+            <Cursor fx:constant="NONE" />
+        </cursor>
+    </TextArea>
+    <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Tips: Retrace will be executed when the 'Obfuscated Trace' changes" textFill="#3c3c3c" GridPane.rowIndex="2">
+        <font>
+            <Font size="11.0" />
+        </font>
+    </Label>
+    <padding>
+        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+    </padding>
+</GridPane>

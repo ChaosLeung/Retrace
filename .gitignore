@@ -20,3 +20,5 @@ captures/
 .externalNativeBuild
 .cxx/
 .java-version
+
+.DS_Store
